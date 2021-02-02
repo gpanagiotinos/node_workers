@@ -1,0 +1,15 @@
+{
+  "name": "node_workers",
+  "version": "1.0.0",
+  "description": "node_workers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --experimental-worker index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

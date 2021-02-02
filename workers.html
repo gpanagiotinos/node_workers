@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workers</title>
+</head>
+
+<body onload="load()">
+    <div>
+        <button id="async_promise">
+            Async
+        </button>
+        <button id="interval">
+            Interval
+        </button>
+        <button id="workers">
+            Workers
+        </button>
+    </div>
+    <div id="messages">
+    </div>
+</body>
+<script>
+    var messagesArray = []
+    function xmlReq(url) {
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', url)
+        xhr.send()
+        xhr.onload = function () {
+            if (xhr.status != 200) {
+                render(xhr.statusText)
+            } else {
+                render(xhr.responseText)
+            }
+        }
+    }
+
+    function render(response) {
+        const messages = document.getElementById('messages')
+        messagesArray.push(response)
+        const messageHTML = messagesArray.reduce((initValue, message) => {
+            return initValue += `<h5>${message}</h5>`
+        }, '')
+
+        messages.innerHTML = messageHTML
+    }
+    function load() {
+        const asyncPromise = document.getElementById('async_promise')
+        const interval = document.getElementById('interval')
+        const workers = document.getElementById('workers')
+        asyncPromise.addEventListener('click', () => {
+            render('Run Async, wait: 10000')
+            xmlReq('/async/10000')
+            render('Run Async, wait: 0')
+            xmlReq('/async/0')
+        })
+        interval.addEventListener('click', () => {
+            render('Run blocking, wait: 10000')
+            xmlReq('/wait/10000')
+            render('Run blocking, wait: 0')
+            xmlReq('/wait/0')
+        })
+
+        workers.addEventListener('click', () => {
+            render('Run workers, wait: 10000')
+            xmlReq('/worker/10000')
+            render('Run workers, wait: 0')
+            xmlReq('/worker/0')
+        })
+    }
+</script>
+
+</html>
